@@ -12,8 +12,11 @@ services:
 
   user-micro:
     build: ./user
+    image: dfanso/user-micro:latest
     ports:
       - "8080:8080"
+    depends_on:
+      - postgres
     environment:
       - 'SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/mydatabase'
       - 'SPRING_DATASOURCE_USERNAME=myuser'
@@ -26,10 +29,13 @@ services:
 
   product-micro:
     build: ./product
+    image: dfanso/product-micro:latest
     ports:
       - "8081:8080"
     depends_on:
+      - postgres
       - user-micro
+      
     environment:
       - 'SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/mydatabase'
       - 'SPRING_DATASOURCE_USERNAME=myuser'
@@ -42,9 +48,11 @@ services:
 
   order-micro:
     build: ./order
+    image: dfanso/order-micro:latest
     ports:
       - "8082:8080"
     depends_on:
+      - postgres
       - user-micro
       - product-micro
     environment:
@@ -59,9 +67,11 @@ services:
 
   batch-micro:
     build: ./batch
+    image: dfanso/batch-micro:latest
     ports:
       - "8083:8080"
     depends_on:
+      - postgres
       - user-micro
       - product-micro
       - order-micro
